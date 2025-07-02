@@ -212,11 +212,11 @@ function setupKeyboardControls(playerId: string, up: string, right: string, down
   new KeyPressListener(left,  () => tryToMove(playerId, 3))
 }
 
-setupKeyboardControls('1', "ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft")
-setupKeyboardControls('2', "KeyW", "KeyD", "KeyS", "KeyA")
-setupKeyboardControls('3', "KeyI", "KeyL", "KeyK", "KeyJ")
+setupKeyboardControls('local2', "KeyW", "KeyD", "KeyS", "KeyA")
+setupKeyboardControls('local3', "KeyI", "KeyL", "KeyK", "KeyJ")
 
 gameServer.subscribe('set-player-id', (id)              => gameState.playerId = id as string)
+gameServer.subscribe('set-player-id', (id)              => setupKeyboardControls(id as string, "ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"))
 gameServer.subscribe('add-cat',       (cat)             => gameState.addCat(cat as Cat))
 gameServer.subscribe('update-cat',    ({ id, newData }) => gameState.updateCat(id, newData))
 gameServer.subscribe('remove-cat',    (id)              => gameState.removeCat(id))

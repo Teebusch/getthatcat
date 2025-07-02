@@ -7,103 +7,48 @@ devmode(TRUE)
 
 # --- Globaler Server ------------------------------------------------------------------------------
 
-ChatServer <- R6::R6Class(
-  "ChatServer",
-  public = list(
-    initialize = function() {
-      # ...
-    },
-    join = function() {
-      # ...
-    },
-    leave = function() {
-      # ...
-    },
-    send_message = function(message) {
-      # ...
-    }
-  ),
-  private = list(
-    subscribers = list(),
-    notify_subscribers = function() {
-      # ...
-    }
-  )
-)
-
-chat <- ChatServer$new() 
+game_server <- GameServer$new() 
 
 
 # --- Client --------------------------------------------------------------------------------------
 
 server <- function(input, output, session) {
-  # Nutzer beim chat server anmelden, wenn seine Session beginnt
-  chat$join() 
-  # ...
   
-  # Auf eingehende Nachrichten reagieren
-  msg_content <- "Test, Test, 1, 2, 3...🎤"
-  render_message(msg_content)
-  # ...
+  # an/abmelden
+  state <- game_server$join() 
+  player_id <- state$player_id
+  session$onSessionEnded(\() game_server$leave(player_id))
+  session$sendCustomMessage("set-player-id", player_id)
   
-  # Nutzer vom chat server abmelden, wenn seine Session endet
-  session$onSessionEnded(\() { 
-    chat$leave() 
+  # State im Client herstellen
+  purrr::walk(
+    state$cats$get_all(), 
+    \(cat) session$sendCustomMessage("add-cat", cat)
+  )
+  purrr::walk(
+    state$players$get_all(), 
+    \(player) session$sendCustomMessage("add-player", player)
+  )
+  
+  # Auf Server Events reagieren
+  game_server$events$subscribe(\(event) {
+    e <- as.list(event)
+    session$sendCustomMessage(e$topic, e$data)
   })
   
-  # Den chat server darüber informieren, dass dieser Nutzer eine chat nachricht sendet
+  # Auf Browser Events reagieren
   observeEvent(
-    input$inp_message,
-    {
-      msg_content <- req(input$inp_message)
-      updateTextInput(session, "inp_message", value = "")
-      chat$send_message(msg_content)
-    }
-  )
+    input[["player-request-move"]], {
+    data <- input[["player-request-move"]]
+    game_server$request_move(player_id, data$move)
+  })
+
 }
 
 
 # --- UI Funktionen --------------------------------------------------------------------------------
 
-# Hier braucht erstmal nix angepast zu werden um den Chat zum laufen zu bekommen.
-
-ui <- bslib::page_fillable(
-  title = "Shiny Chat",
-  theme = bslib::bs_theme(preset = "sketchy"),
-  tags$style("
-    .fade-in { animation: fadeIn 0.2s ease-in; }
-    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-  "),
-  tags$h1("Shiny Chat"),
-  div(
-    id = "messages", 
-    class = "d-flex flex-column-reverse align-items-start overflow-y-scroll p-3"
-  ) |> 
-    bslib::as_fill_item(),
-  wellPanel(
-    textInput(
-      "inp_message", 
-      label = NULL, 
-      placeholder = "Nachricht (Enter zum Senden)", 
-      width = "100%", 
-      updateOn = "blur"
-    ) |>
-      htmltools::tagAppendAttributes(
-        class = "mb-0"
-      ) |>
-      htmltools::tagAppendAttributes(
-        autofocus = "", 
-        autocomplete = "off", 
-        .cssSelector = "input"
-      )
-  )
-)
-
-
-render_message <- function(msg_content) {
-  msg <- div(class = "alert alert-info fade-in", msg_content)
-  insertUI("#messages", "afterBegin", msg)
-}
+ui <- htmlTemplate("template.html")
 
 
 shinyApp(ui, server)
