@@ -5,28 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Get that Cat</title>
+    {{ headContent() }}
   </head>
   <body>
 
   <div class="game-container" x-data="$store.gameState">
     <div class="hud">
-      <h1>Get that Cat</h1>
-      <div class="player-list">
-        <template x-for="(player, index) in players" :key="player.id">
-          <div>
-            <div 
-            class="Character Player" 
-            :class="player.id == playerId ? 'you' : ''"
-            :data-model="player.model" 
-            :data-facing="player.facing"
-            >
-              <div class="shadow"></div>
-              <div class="sprite"></div>
-            </div>
-
-          </div>
-        </template>
-      </div>
+      <h1>Get that Cat!</h1>
     </div>
 
     <div class="map">
@@ -37,7 +22,7 @@
         :class="cat.trapped ? 'trapped' : ''"
         :data-facing="cat.facing"
         :data-model="cat.model" 
-        :style="{transform: `translate3d(${16 * x}px, ${16 * y}px, 0)`}"
+        :style="{transform: `translate3d(${16 * cat.x}px, ${16 * cat.y}px, 0)`}"
         >
           <div class="shadow"></div>
           <div class="sprite"></div>

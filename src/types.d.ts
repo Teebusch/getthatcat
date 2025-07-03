@@ -26,6 +26,10 @@ export type GameState = {
   players: Player[],
   cats: Cat[],
   playerId: string | null,
+  setPlayerId: (id: string) => void;
+  // Methods to manipulate players and cats
+  // These methods will be used to update the game state
+  // when receiving messages from the server
   addPlayer: (player: Player) => void;
   removePlayer: (id: string) => void;
   updatePlayer: (id: string, newData: Partial<Player>) => void;

@@ -3,7 +3,7 @@
 
 library(shiny)
 
-devmode(TRUE)
+#devmode(TRUE)
 
 # --- Globaler Server ------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ server <- function(input, output, session) {
 
 # --- UI Funktionen --------------------------------------------------------------------------------
 
-ui <- htmlTemplate("template.html")
+ui <- htmlTemplate("index.html")
 
 
 shinyApp(ui, server)
