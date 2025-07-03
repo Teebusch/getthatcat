@@ -1,0 +1,7 @@
+.RProj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+rsconnect
+shiny_bookmarks/

@@ -53,7 +53,10 @@ export class ServerAdapter {
   }
 
   subscribe(topic: string, callback: (data: any) => void) {
-    this.#Shiny.addCustomMessageHandler(topic, callback);
+    this.#Shiny.addCustomMessageHandler(topic, (evt: any) => {
+      // console.log(`Received message for topic '${topic}'`, evt);
+      callback(evt);
+    });
   }
 }
 
@@ -63,8 +66,8 @@ function mockServerMessages(shiny: typeof mockShinyObject) {
         () => {
             shiny.notify('set-player-id', '1')
             shiny.notify('add-player', { id: '1', name: 'Hubert', model: 'green', facing: 'right', x: 9, y: 5 })
-            shiny.notify('add-player', { id: '2', name: 'Sallly', model: 'purple', facing: 'left', x: 2, y: 9 })
-            shiny.notify('add-player', { id: '3', name: 'Bob', model: 'red', facing: 'left', x: 4, y: 6 })
+            shiny.notify('add-player', { id: 'local2', name: 'Sallly', model: 'purple', facing: 'left', x: 2, y: 9 })
+            shiny.notify('add-player', { id: 'local3', name: 'Bob', model: 'red', facing: 'left', x: 4, y: 6 })
             shiny.notify('add-cat', { id: '1', x: 8, y: 5, facing: 'left', lastMove: null, model: 'orange', fuss: 5, trapped: false })
             shiny.notify('add-cat', { id: '2', x: 3, y: 5, facing: 'left', lastMove: null, model: 'gray', fuss: 5, trapped: false })
             shiny.notify('add-cat', { id: '3', x: 3, y: 5, facing: 'left', lastMove: null, model: 'black', fuss: 5, trapped: false })

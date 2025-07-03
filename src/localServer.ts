@@ -164,36 +164,36 @@ function isFreeTile(x: number, y: number) {
 }
 
 
-function startGame(server: typeof ServerAdapter) {
-    let cats: Cat[] = []
+// function startGame() {
+//     let cats: Cat[] = []
 
-    // add some cats
-    cats.push({ id: '1', x: 8, y: 5, facing: 'left', lastMove: null, model: 'orange', fuss: 5, trapped: false })
-    cats.push({ id: '2', x: 3, y: 5, facing: 'left', lastMove: null, model: 'gray', fuss: 5, trapped: true })
-    cats.push({ id: '3', x: 3, y: 5, facing: 'left', lastMove: null, model: 'black', fuss: 5, trapped: false })
-    cats.push({ id: '4', x: 3, y: 5, facing: 'left', lastMove: null, model: 'red', fuss: 5, trapped: false })
+//     // add some cats
+//     cats.push({ id: '1', x: 8, y: 5, facing: 'left', lastMove: null, model: 'orange', fuss: 5, trapped: false })
+//     cats.push({ id: '2', x: 3, y: 5, facing: 'left', lastMove: null, model: 'gray', fuss: 5, trapped: true })
+//     cats.push({ id: '3', x: 3, y: 5, facing: 'left', lastMove: null, model: 'black', fuss: 5, trapped: false })
+//     cats.push({ id: '4', x: 3, y: 5, facing: 'left', lastMove: null, model: 'red', fuss: 5, trapped: false })
 
-    // move cats around randomly
-    setInterval(() => {
-        cats.forEach(cat => {
-            let nextMove = getNextMove(cat.x, cat.y, cat.lastMove)
+//     // move cats around randomly
+//     setInterval(() => {
+//         cats.forEach(cat => {
+//             let nextMove = getNextMove(cat.x, cat.y, cat.lastMove)
 
-            if (nextMove) {
-                cat.x = nextMove.positionAfterMove.x
-                cat.y = nextMove.positionAfterMove.y
-                if (nextMove.move == 1) cat.facing = "right"
-                if (nextMove.move == 3) cat.facing = "left"
-                cat.lastMove = nextMove.move;
-                cat.trapped = false
-            } else {
-                // cat trapped -- becomes less fuzzy until 0, then remove cat
-                cat.trapped = true
-                cat.lastMove = null
-                cat.fuss -= 1
-                if (cat.fuss == 0) {
-                    gameState.removeCat(cat.id)
-                }
-            }
-        });
-    }, 500);
-}
+//             if (nextMove) {
+//                 cat.x = nextMove.positionAfterMove.x
+//                 cat.y = nextMove.positionAfterMove.y
+//                 if (nextMove.move == 1) cat.facing = "right"
+//                 if (nextMove.move == 3) cat.facing = "left"
+//                 cat.lastMove = nextMove.move;
+//                 cat.trapped = false
+//             } else {
+//                 // cat trapped -- becomes less fuzzy until 0, then remove cat
+//                 cat.trapped = true
+//                 cat.lastMove = null
+//                 cat.fuss -= 1
+//                 if (cat.fuss == 0) {
+//                     gameState.removeCat(cat.id)
+//                 }
+//             }
+//         });
+//     }, 500);
+// }

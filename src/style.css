@@ -9,13 +9,21 @@ html, body {
   background: linear-gradient(180deg, #64BEFF -50%, #6e96ff 69.71%, #2a65ff 150%);
   font-family: sans-serif;
   display: flex;
-  align-items: center;
   justify-content: center;
+  padding: 3rem 1rem
 }
 
 
-.hud h1 {
+.hud h1,h2 {
+  font-family: "Slackey", cursive;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(3, 30, 62, 0.5);
+  margin: 0;
   text-align: center;
+}
+
+.hud h1 {
+  font-size: 3rem;
 }
 
 .hud .player-list {
@@ -25,16 +33,21 @@ html, body {
 }
 
 .game-container { 
-  min-height: 1032px;
+  --map-height: 208px;
+  --map-width: 240px;
+  min-height: calc(var(--map-height) * 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .map {
   position: relative;
-  width: 240px;
-  height: 208px;
+  width: var(--map-width);
+  height: var(--map-height);
   background: url(/images/map.png) no-repeat no-repeat;
-  transform: scale(4);
-  transform-origin: top;
+  transform: scale(3);
+  transform-origin: top center;;
   image-rendering: pixelated;
 }
 
@@ -101,14 +114,7 @@ html, body {
 
 .Character .info-container {
   position: absolute;
-  top: -12px;
-  left: -5px;
-  font-size: 3px;
-  padding: 1px 2px 1px;
-  border-radius: 3px;
-  background: #333;
-  color: white;
-  font-weight: bold;
+  z-index: 10;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -132,16 +138,24 @@ html, body {
   background-position-y: -48px;
 }
 
-.Character.Cat.trapped {
+.Character.Cat.trapped .sprite {
   animation: angryCat 0.7s infinite alternate;
 }
 
 .Character.Cat .info-container {
-  background: rgb(19, 19, 19);
-  z-index: 3;
+  width: 10px;
+  top: -7px;
+  left: 2px;
+  font-size: 4px;
+  padding: 0 0.5px;
+  border-radius: 2px;
+  background: rgba(35, 35, 35, 0.8);
+  color: white;
+  font-weight: bold;
+  text-align: center;
   .fuss::after {
     content: "·";
-    padding: 1px;
+    padding: 0.2px;
   }
 }
 
