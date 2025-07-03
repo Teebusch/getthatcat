@@ -22,7 +22,7 @@ export default defineConfig({
                     const match = contents.toString().match(headRegex);
                     if (match) {    
                         const head = match[1];
-                        return contents.toString().replace(headRegex, `<head>${headContent}${head}</head>`);
+                        return contents.toString().replace(headRegex, `<head>${head}${headContent}</head>`);
                     }
                  }
              }

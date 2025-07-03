@@ -2,18 +2,20 @@ import { KeyPressListener } from './keyPressListener'
 import { ServerAdapter } from './shinyServer';
 import './style.css'
 import Alpine from 'alpinejs'
-import type { Cat, GameState, Move, Player, Position } from './types';
-
-const gameServer = new ServerAdapter();
+import type { Cat, GameState, Move, Player } from './types';
 
 Alpine.store('gameState', {
   cats: [],
   players: [],
   playerId: null,
+  level: null,
+
+  setLevel(level: number) {
+    this.level = level
+  },
 
   setPlayerId(id: string) {
     this.playerId = id
-    console.log("Updated player ID", id)
   },
 
   addPlayer(player: Player) {
@@ -48,6 +50,7 @@ Alpine.store('gameState', {
     if (idx !== -1) {
       this.cats[idx] = { ...this.cats[idx], ...newData}
     }
+    console.log(`Updated cat ${id}`, newData);
   },
 
   removeCat(id) {
@@ -81,13 +84,23 @@ function setupKeyboardControls(playerId: string, up: string, right: string, down
   new KeyPressListener(left,  () => tryToMove(playerId, 3))
 }
 
-gameServer.subscribe('set-player-id', (id)              => gameState.setPlayerId(id as string))
-gameServer.subscribe('set-player-id', (id)              => setupKeyboardControls(id as string, "ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"))
+function setupPlayer(playerId: string): void {
+  // Player-ID received from server, set it in game state
+  gameState.setPlayerId(playerId)
+
+  // Setup keyboard controls for the player
+  setupKeyboardControls(playerId, "ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft")
+}
+
+Alpine.start()
+
+const gameServer = new ServerAdapter();
+
+gameServer.subscribe('new-level',     ({ level })       => gameState.setLevel(level as number))
+gameServer.subscribe('set-player-id', (id)              => setupPlayer(id as string))
 gameServer.subscribe('add-cat',       (cat)             => gameState.addCat(cat as Cat))
 gameServer.subscribe('remove-cat',    (id)              => gameState.removeCat(id))
 gameServer.subscribe('add-player',    (player)          => gameState.addPlayer(player as Player))
 gameServer.subscribe('remove-player', (id)              => gameState.removePlayer(id))
 gameServer.subscribe('update-cat',    ({ id, newData }) => gameState.updateCat(id, newData))
 gameServer.subscribe('update-player', ({ id, newData }) => gameState.updatePlayer(id, newData))
-
-Alpine.start()

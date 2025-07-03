@@ -12,9 +12,11 @@ GameServer <- R6::R6Class(
             for(i in seq_len(self$level)) {
                 self$add_cat()
             }
+            self$events$broadcast(new_event("new-level", list(level = self$level)))
+            invisible(self)
         },
         
-        join = function(player_id) {
+        join = function() {
             player <- new_player()
             self$players$add(player)
             if (!self$game_is_running) {
@@ -24,6 +26,7 @@ GameServer <- R6::R6Class(
             
             list(
                 player_id = player$id,
+                level = self$level,
                 players = self$players,
                 cats = self$cats
             )
@@ -92,10 +95,10 @@ GameServer <- R6::R6Class(
                     cat$fuss <- 5L
                 } else {
                     # cat trapped -- becomes less fuzzy until 0, then remove cat
-                    cat$trapped <- true
+                    cat$trapped <- TRUE
                     cat$lastMove <- NULL
                     cat$fuss <- cat$fuss - 1L
-                    if (cat.fuss == 0) {
+                    if (cat$fuss == 0) {
                         # cat is caught. return early
                         self$remove_cat(cat$id)
                         return()
@@ -104,7 +107,7 @@ GameServer <- R6::R6Class(
                 self$cats$set(cat$id, cat)
                 self$events$broadcast(new_event(
                     "update-cat", 
-                    list(id = cat$id, newData = cat[c("x", "y", "facing", "fuss")])
+                    list(id = cat$id, newData = cat[c("x", "y", "facing", "fuss", "trapped")])
                 ))
             })
         },

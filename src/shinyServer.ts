@@ -54,7 +54,7 @@ export class ServerAdapter {
 
   subscribe(topic: string, callback: (data: any) => void) {
     this.#Shiny.addCustomMessageHandler(topic, (evt: any) => {
-      console.log(`Received message for topic '${topic}'`, evt);
+      // console.log(`Received message for topic '${topic}'`, evt);
       callback(evt);
     });
   }

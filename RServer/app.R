@@ -3,7 +3,7 @@
 
 library(shiny)
 
-#devmode(TRUE)
+devmode(TRUE)
 
 # --- Globaler Server ------------------------------------------------------------------------------
 
@@ -16,11 +16,12 @@ server <- function(input, output, session) {
   
   # an/abmelden
   state <- game_server$join() 
-  player_id <- state$player_id
   session$onSessionEnded(\() game_server$leave(player_id))
-  session$sendCustomMessage("set-player-id", player_id)
   
   # State im Client herstellen
+  player_id <- state$player_id
+  session$sendCustomMessage("set-player-id", player_id)
+  
   purrr::walk(
     state$cats$get_all(), 
     \(cat) session$sendCustomMessage("add-cat", cat)
@@ -29,6 +30,8 @@ server <- function(input, output, session) {
     state$players$get_all(), 
     \(player) session$sendCustomMessage("add-player", player)
   )
+  
+  session$sendCustomMessage("new-level", list(level = state$level))
   
   # Auf Server Events reagieren
   game_server$events$subscribe(\(event) {
@@ -48,7 +51,7 @@ server <- function(input, output, session) {
 
 # --- UI Funktionen --------------------------------------------------------------------------------
 
-ui <- htmlTemplate("index.html")
+ui <- htmlTemplate("game.html")
 
 
 shinyApp(ui, server)

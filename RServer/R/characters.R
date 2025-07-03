@@ -38,11 +38,11 @@ EntityList <- R6::R6Class(
 
 
 player_factory <- function() {
-    models <- sample(c('red', 'orange', 'yellow', 'green', 'purple'))
-    idx <- 1L
+    models <- c('red', 'orange', 'yellow', 'green', 'purple')
+    idx <- 0L
     
     function() {
-        model <- models[[idx %% length(models)]]
+        model <- models[[idx %% length(models) + 1L]]
         idx <<- idx + 1L
         list(
             id = get_uid(),
@@ -74,11 +74,11 @@ cat_factory <- function() {
         c(9,9)
     ))
     models <- c('orange', 'gray', 'black', 'red')
-    idx <- 1L
+    idx <- 0L
     
     function() {
-        pos <- positions[[idx %% length(positions)]]
-        model <- models[[idx %% length(models)]]
+        pos <- positions[[idx %% length(positions) + 1L]]
+        model <- models[[idx %% length(models) + 1L]]
         idx <<- idx + 1L
         list(
             id = get_uid(),

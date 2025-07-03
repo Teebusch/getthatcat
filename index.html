@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
     <title>Get that Cat</title>
-    {{ headContent() }}
   </head>
   <body>
 
   <div class="game-container" x-data="$store.gameState">
     <div class="hud">
       <h1>Get that Cat!</h1>
+      <h2 x-text="`Level: ${level}`" class="level"></h2>
     </div>
 
     <div class="map">
@@ -46,9 +49,6 @@
         >
           <div class="shadow"></div>
           <div class="sprite"></div>
-          <!-- <div class="info-container">
-            <span class="name" x-text="player.name"></span>
-          </div> -->
           <div class="you-arrow"></div>
         </div>
       </template>

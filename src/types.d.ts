@@ -23,13 +23,12 @@ export type Player = ICharacter & {
 }
 
 export type GameState = {
+  level: number | null,
   players: Player[],
   cats: Cat[],
   playerId: string | null,
   setPlayerId: (id: string) => void;
-  // Methods to manipulate players and cats
-  // These methods will be used to update the game state
-  // when receiving messages from the server
+  setLevel: (level: number) => void;
   addPlayer: (player: Player) => void;
   removePlayer: (id: string) => void;
   updatePlayer: (id: string, newData: Partial<Player>) => void;
