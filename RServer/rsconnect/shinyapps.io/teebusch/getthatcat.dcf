@@ -1,0 +1,13 @@
+name: getthatcat
+title: getthatcat
+username: teebusch
+account: teebusch
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 15027324
+bundleId: 10558470
+url: https://teebusch.shinyapps.io/getthatcat/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile
